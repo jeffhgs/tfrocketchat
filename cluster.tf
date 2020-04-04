@@ -34,13 +34,12 @@ resource "aws_instance" "app_server" {
     instance_type = "${var.app_instance_type}"
     associate_public_ip_address = true
     vpc_security_group_ids = [
-        "${aws_security_group.app.id}",
-        "${aws_security_group.app_gossip.id}"
+        "${aws_security_group.app.id}"
     ]
     key_name = "${aws_key_pair.key.id}"
     count = "${var.app_instance_count}"
     availability_zone = "${var.region}a"
-    user_data = "${module.script.cloudinit-config1}"
+//    user_data = "${module.script.cloudinit-config1}"
 }
 
 resource "aws_key_pair" "key" {
