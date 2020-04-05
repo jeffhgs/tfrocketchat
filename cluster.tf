@@ -13,6 +13,7 @@ variable "ami" {}
 
 variable "dnsDomainName" {}
 variable "dnsZoneId" {}
+variable "emailForSsl" {}
 
 provider "aws" {
     region = var.region
@@ -70,6 +71,7 @@ data "template_file" "conf-json" {
   vars = {
     dnsDomainName = var.dnsDomainName
     cluster_name= var.cluster_name
+    emailForSsl = var.emailForSsl
   }
 }
 
