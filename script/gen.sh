@@ -8,5 +8,5 @@ ${adirProj}/util/quote_heredoc.sh "${adirProj}/script/docker-compose.yml" "docke
 ${adirProj}/util/quote_heredoc.sh "${adirProj}/script/dockercompose.sh" "dockercompose.sh" EO3F
 ${adirProj}/util/quote_heredoc.sh "${adirProj}/script/gen_self_sign.sh" "gen_self_sign.sh" EO4F
 ${adirProj}/util/quote_heredoc.sh "${adirProj}/script/installall.sh" "installall.sh" EO5F
-${adirProj}/util/quote_heredoc.sh "${adirProj}/script/run.sh" "run.sh" EO6F
-echo 'bash ${adirScript}/run.sh'
+${adirProj}/util/quote_heredoc.sh "${adirProj}/script/up.sh" "up.sh" EO6F
+echo '(cd "${adirScript}" && bash ${adirScript}/installall.sh)'
