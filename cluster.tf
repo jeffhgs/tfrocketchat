@@ -65,6 +65,20 @@ resource "local_file" "reprovision" {
     depends_on = [data.template_file.rerun-sh]
 }
 
+data "template_file" "conf-json" {
+  template = "${file("${path.module}/script/conf.json.tpl")}"
+  vars = {
+    dnsDomainName = var.dnsDomainName
+    cluster_name= var.cluster_name
+  }
+}
+
+resource "local_file" "conf-json" {
+    filename = "${path.module}/out/conf.json"
+    content = "${data.template_file.conf-json.rendered}"
+    depends_on = [data.template_file.conf-json]
+}
+
 resource "aws_route53_record" "app" {
   zone_id = var.dnsZoneId
   name    = "${var.cluster_name}.${var.dnsDomainName}"
