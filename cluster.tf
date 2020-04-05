@@ -51,6 +51,20 @@ output "instanceIP" {
     value = "${aws_instance.app_server.*.public_dns}"
 }
 
+resource "template_file" "rerun-sh" {
+  template = "${file("${path.module}/script/rerun.sh.tpl")}"
+  vars = {
+    hostEc2 = "${aws_instance.app_server.*.public_dns}"[0]
+    userEc2 = "ubuntu"
+  }
+}
+
+resource "local_file" "reprovision" {
+    filename = "${path.module}/out/rerun.sh"
+    content = "${template_file.rerun-sh.rendered}"
+    depends_on = [template_file.rerun-sh]
+}
+
 resource "aws_route53_record" "app" {
   zone_id = var.dnsZoneId
   name    = "${var.cluster_name}.${var.dnsDomainName}"

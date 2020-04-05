@@ -1,5 +1,5 @@
 #!/bin/bash
-adirScript="$( cd "$( dirname "$${BASH_SOURCE[0]}" )" && pwd )"
+adirScript="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 apt-get update
 apt-get install wget
