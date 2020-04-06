@@ -13,7 +13,7 @@ if [ ! -e "/opt/letsencrypt" ]
 then
   git clone https://github.com/letsencrypt/letsencrypt /opt/letsencrypt
 fi
-(cd /opt/letsencrypt && ./letsencrypt-auto certonly -n --standalone --email ${emailForSsl} -d ${fqdn})
+(cd /opt/letsencrypt && ./letsencrypt-auto certonly -n --agree-tos  --standalone --email ${emailForSsl} -d ${fqdn})
 
 cat > /tmp/nginx_config_default <<EO10F
 server {
