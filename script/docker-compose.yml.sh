@@ -1,3 +1,9 @@
+#!/bin/bash
+adirProj="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
+
+afileOut="$1"
+
+cat > "$afileOut" <<"EODCF"
 version: '2'
 
 services:
@@ -101,3 +107,4 @@ services:
   #  volumes:
   #    - /var/run/docker.sock:/var/run/docker.sock
   
+EODCF
