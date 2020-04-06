@@ -1,9 +1,14 @@
 #!/bin/bash
 adirProj="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
 
-afileOut="$1"
+afileConf="$1"
+afileOut="$2"
 
-cat > "$afileOut" <<"EODCF"
+cluster_name=$(cat "$afileConf" | jq -r ".cluster_name")
+dnsDomainName=$(cat "$afileConf" | jq -r ".dnsDomainName")
+fqdn=${cluster_name}.${dnsDomainName}
+
+cat > "$afileOut" <<EODCF
 version: '2'
 
 services:
@@ -11,18 +16,18 @@ services:
     image: rocketchat/rocket.chat:latest
     command: >
       bash -c
-        "for i in `seq 1 30`; do
+        "for i in \$\$(seq 1 30); do
           node main.js &&
-          s=$$? && break || s=$$?;
-          echo \"Tried $$i times. Waiting 5 secs...\";
+          s=\$\$? && break || s=\$\$?;
+          echo \"Tried \$\$i times. Waiting 5 secs...\";
           sleep 5;
-        done; (exit $$s)"
+        done; (exit \$\$s)"
     restart: unless-stopped
     volumes:
       - ./uploads:/app/uploads
     environment:
       - PORT=3000
-      - ROOT_URL=http://localhost:3000
+      - ROOT_URL=https://${fqdn}
       - MONGO_URL=mongodb://mongo:27017/rocketchat
       - MONGO_OPLOG_URL=mongodb://mongo:27017/local
       - MAIL_URL=smtp://smtp.email
@@ -52,15 +57,15 @@ services:
     image: mongo:4.0
     command: >
       bash -c
-        "for i in `seq 1 30`; do
+        "for i in \$\$(seq 1 30); do
           mongo mongo/rocketchat --eval \"
             rs.initiate({
               _id: 'rs0',
               members: [ { _id: 0, host: 'localhost:27017' } ]})\" &&
-          s=$$? && break || s=$$?;
-          echo \"Tried $$i times. Waiting 5 secs...\";
+          s=\$\$? && break || s=\$\$?;
+          echo \"Tried \$\$i times. Waiting 5 secs...\";
           sleep 5;
-        done; (exit $$s)"
+        done; (exit \$\$s)"
     depends_on:
       - mongo
 
