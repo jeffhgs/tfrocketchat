@@ -3,6 +3,13 @@
 
 Immutable infrastructure terraform deployment scripts for testing [rocketchat](https://rocket.chat/), a real time messaging system for teams.
 
+# Prerequisites
+
+- An AWS account.
+- A DNS domain or subdomain controlled by AWS Route 53.
+- Terraform.  Tested with version 0.13.5.
+- Openssh.  Tested with OpenSSH_7.9p1, LibreSSL 2.7.3.
+
 # Scope
 
 Things required for testing the server and phone apps are included, such as:
@@ -12,13 +19,11 @@ Things required for testing the server and phone apps are included, such as:
 
 Backup, monitoring and other things related to production installation are out of scope.
 
+Load for a test installation is presumed to be small for testing.  The mongo database is hosted on the same EC2 instance as the application server.  In our tests, a t2.small EC2 instance was capable of performing both functions.
+
 One master initialization script is generated for all server configuration.  For speed of troubleshooting, the script presumes access to an ssh port on the server, instead of passing the script through EC2 userdata.
 
 Recommended use when network must be closed is to apply the script on a bastion host.
-
-# Prerequisites
-
-- Terraform.  Tested with version 0.13.5
 
 # Instructions
 
@@ -38,13 +43,35 @@ Copy the sample configuration file:
 
 Populate the configuration file with required values.  Comments in the example file describe the values.
 
-One of the configuration file entries is cluster_name, which is a DNS entry to create.  You might consider setting cluster_name to the name of the file.
+| Key | Description | Example |
+|---|---|---|
+| app_instance_type | An EC2 instance type | "t2.small" |
+| db_password | The text to use as your database password |  |
+| ssh_public_key | The inlined text of an RSA ssh public key | "ssh-rsa AAAA. . ." |
+| ssh_private_key | A fully qualified path to an openssh RSA private key |  |
+| cluster_name | A DNS host name (host only, no domain) | rocketchatbeta |
+| region | AWS region | us-west-1 |
+| ami | An AWS AMI for ubuntu 16.04 matching the region | ami-0375ca3842950ade6 |
+| dnsDomainName | Your DNS domain controlled by AWS route 53 |  |
+| dnsZoneId | The Route 53 Zone Id for your DNS domain | Z...12morechars...8 |
+| emailForSsl | Contact info to send Let's Encrypt |  |
+
+
+For the ami, locate ubuntu 16.04 LTS for your region using the ubuntu AMI finder, https://cloud-images.ubuntu.com/locator/ec2/.  Recommended properties are:
+
+| Property | Value |
+|---|---|
+| Arch | amd64 |
+| Instance Type | hvm:ebs-ssd |
+| AKI-ID | hvm |
+
+For cluster_name, you might consider setting cluster_name to the name of the configuration file.
 
 ## Convention for writing commands
 
-For the purpose of this README, these environment values will be denoted in the way that shell denotes variable substitution, e.g. $STAGE.
+For the purpose of this README, environment values in commands will be denoted in the way that shell denotes variable substitution, e.g. $STAGE.
 
-Using our convention for environment variables carries the convenience that if we set each of our three environment variables like so:
+Writing environment variables this way carries the convenience that if we set each of our three environment variables like so:
 
     export STAGE=beta
 
@@ -177,7 +204,6 @@ Upon confirmation, you will see:
 
     Destroy complete! Resources: 10 destroyed.
 
-  
 # Advanced instructions
 
 ## Deep clean
