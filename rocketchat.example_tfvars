@@ -1,0 +1,33 @@
+# An EC2 instance type, such as "t2.small"
+app_instance_type = ". . ."
+
+# The text to use as your database password
+db_password = ". . ."
+
+# The inlined text of an RSA ssh public key
+ssh_public_key = "ssh-rsa AAAA. . ."
+
+# A fully qualified path to 
+ssh_private_key = ". . ."
+
+# DNS name
+cluster_name = "rocketchata"
+
+# AWS region, such as us-west-2
+region=". . ."
+
+# An AWS AMI for ubuntu 16.04 matching the region
+#
+# Tested with:
+#         us-west-2       xenial  16.04 LTS       amd64   hvm:ebs-ssd     20190617        ami-0375ca3842950ade6   hvm
+ami=""
+
+# Your top-level domain name controlled by AWS route 53
+dnsDomainName=". . ."
+
+# Your Route 53 Zone Id
+dnsZoneId=". . ."
+
+# Contact info to send Let's Encrypt
+emailForSsl=". . .@. . ..com"
+
