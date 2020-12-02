@@ -1,7 +1,7 @@
 
 # Synopsis
 
-Immutable infrastructure terraform deployment scripts for testing rocketchat.
+Immutable infrastructure terraform deployment scripts for testing [rocketchat](https://rocket.chat/), a real time messaging system for teams.
 
 # Scope
 
@@ -32,8 +32,6 @@ Choose three environment variables:
 | AWS_DEFAULT_REGION | An AWS region, such as "us-west-2"|
 | STAGE | A user-defined string, such as "prod", "dev", etc.  STAGE becomes the name of your .tfvars configuration file. |
 
-For the purpose of this README, these environment values will be denoted in the way that shell denotes variable substitution, e.g. $STAGE.
-
 Copy the sample configuration file:
 
     cp rocketchat.example_tfvars $STAGE.tfvars
@@ -42,14 +40,42 @@ Populate the configuration file with required values.  Comments in the example f
 
 One of the configuration file entries is cluster_name, which is a DNS entry to create.  You might consider setting cluster_name to the name of the file.
 
-## Deploy
+## Convention for writing commands
+
+For the purpose of this README, these environment values will be denoted in the way that shell denotes variable substitution, e.g. $STAGE.
+
+Using our convention for environment variables carries the convenience that if we set each of our three environment variables like so:
+
+    export STAGE=beta
+
+then we can use the commands in the instructions verbatim:
+
     env STAGE=$STAGE bash clean.sh
+
+And the shell will substitute our values.
+
+## Deploy
+
+There are only two commands for deployment.  To deploy:
+
     env AWS_PROFILE=$AWS_PROFILE AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION STAGE=$STAGE bash make.sh
 
-## Destroy:
+## Destroy
+
+To destroy the deployment:
+
     env AWS_PROFILE=$AWS_PROFILE AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION STAGE=$STAGE bash destroy.sh
 
+That's all.
+
+  
 # Advanced instructions
+
+## Deep clean
+
+If making big changes to the manifest, it may be necessary to destroy all terrafrom intermediate results:
+
+    env STAGE=$STAGE bash clean.sh
 
 ## Connect to server for troubleshooting
     userChat=ubuntu
